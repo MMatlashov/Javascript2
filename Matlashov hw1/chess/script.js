@@ -1,24 +1,23 @@
 /* Использует три класса:
-1) класс ChessSim(аргументы: <Div> родительский_узел), наследует класс Chessboard. Доступные свойства: function moveSelection(аргументы: String куда), function selectFieldCell(аргументы: <Div> куда_кликнули), restorePieceAt(ргументы: <Div> куда_кликнули), <Div> whiteTaken, <Div> blackTaken.
+1) класс ChessSim(аргументы: <Div> родительский_узел), наследует класс Chessboard. 
+Доступные свойства: function moveSelection(аргументы: String куда), function selectFieldCell(аргументы: <Div> куда_кликнули), takePiece(аргументы: <Div> куда_кликнули),
+restorePieceAt(ргументы: <Div> куда_кликнули), <Div> whiteTaken, <Div> blackTaken.
 2) класс Chessboard(). Доступные свойства: <div> chessField.
 3) класс Piece(аргументы: String цвет, String название, String позиция). */
 
 "use strict";
 
-var divOutput = document.getElementById("output"); //shows id of currently selected cell
-var chessSimNod = document.getElementById("chessSimNod");  //div containing the whole chessSim
+var divOutput = document.getElementById("output"); 
+var chessSimNod = document.getElementById("chessSimNod");  
 var chessSim = new ChessSim(chessSimNod);
 
-//register event listeners
 document.addEventListener("keydown", onKeyDown);
 chessSim.chessField.addEventListener("click", onFieldClicked);
 chessSim.whiteTaken.addEventListener("click", onTakenClicked);
 chessSim.blackTaken.addEventListener("click", onTakenClicked);
-//конец программы =3
 
 //event handlers
-
-function onKeyDown(e){//when any key is pressed, tells selection to move
+function onKeyDown(e){
   switch(e.keyCode){
     case 38: chessSim.moveSelection("up");
     break;
@@ -31,34 +30,74 @@ function onKeyDown(e){//when any key is pressed, tells selection to move
   }
 }
 
-function onFieldClicked(e){// when field clicked
+function onFieldClicked(e){
   chessSim.selectFieldCell(e.target);
+  chessSim.takePiece(e.target)
 }
 
-function onTakenClicked(e){// when area for taken clicked
+function onTakenClicked(e){
   chessSim.restorePieceAt(e.target);
 }
 
 
 //Classes:
 
-function ChessSim(parentnode){ //Draws chessboard with areas for taken figures, controlls selection
-  Chessboard.call(this); //extends Chessboard
+/* СhessSim used to draw the chessboard by inheriting Chessboard, draw two areas for taken pieces, 
+control selected squares and remove taken pieces from the field */
+function ChessSim(p){
+  Chessboard.call(this); 
+  
   var self = this;
-  var alphabet = "abcdefgh"; //used for naming chessboard positions
-  var currentSelect = "";  //id of currently selected cell
-  var myChessSim = document.createElement("div");
-  myChessSim.className = "myChessSim";
-  parentnode.appendChild(myChessSim);
+  var currentSelect = "";
   
-  drawchessSim();
+  drawChessSim(p);
+  fillChessSim();
+  this._fillChessBoard();
+  this._fillLegend();
+  this._chessPieces = self._getPieces();
+  this._placePieces(self._chessPieces);
   
-  this.moveSelection = function(where){  //moves selection around
+  function drawChessSim(parent){ 
+    var simContainer = document.createElement("div");
+    simContainer.className = "simContainer";
+    parent.appendChild(simContainer);
+    
+    //create area for taken pieces (white)
+    self.whiteTaken = document.createElement("div");
+    self.whiteTaken.className = "takenArea";
+    simContainer.appendChild(self.whiteTaken);
+
+    //create chessboard 
+    self._drawChessBoard(simContainer);
+
+    //create area for taken pieces (black)
+    self.blackTaken = document.createElement("div");
+    self.blackTaken.className = "takenArea";
+    simContainer.appendChild(self.blackTaken);
+  }
+    
+  function fillChessSim() {  //fills-in areas with squares
+    //fill-in taken areas
+    for (var i = 0; i < 8; i++){
+      for (var j= 0; j < 2; j++){
+        var square = document.createElement("div");
+        square.className = "cbSquare";
+        square.id = self._ALPHABET[i] + (j + 1) + "taken";
+        self.whiteTaken.appendChild(square);
+        square = document.createElement("div");
+        square.className = "cbSquare";
+        square.id = self._ALPHABET[i] + (j + 7) + "taken";
+        self.blackTaken.appendChild(square);
+      }
+    }
+  }
+  
+  this.moveSelection = function(where){ 
     if(currentSelect != ""){
       var oldSelect = document.getElementById(currentSelect);
       oldSelect.style.border = "none";
       var newSelect = "";
-      switch(where){  //where to move selection
+      switch(where){ 
         case "up": {
           newSelect = currentSelect[0];
           if(currentSelect[1] != '8'){
@@ -75,14 +114,14 @@ function ChessSim(parentnode){ //Draws chessboard with areas for taken figures, 
         break;
         case "right": {
           if(currentSelect[0] != 'h'){
-            newSelect = alphabet[alphabet.indexOf(currentSelect[0]) + 1];
+            newSelect = self._ALPHABET[self._ALPHABET.indexOf(currentSelect[0]) + 1];
           } else newSelect = 'a';
           newSelect += currentSelect[1];
         }
         break;
         case "left": {
           if(currentSelect[0] != 'a'){
-            newSelect = alphabet[alphabet.indexOf(currentSelect[0]) - 1];
+            newSelect = self._ALPHABET[self._ALPHABET.indexOf(currentSelect[0]) - 1];
           } else newSelect = 'h';
           newSelect += currentSelect[1];
         }
@@ -95,63 +134,31 @@ function ChessSim(parentnode){ //Draws chessboard with areas for taken figures, 
   }
   
   this.selectFieldCell = function(target){
-    if (target.className.indexOf("cell") !== -1){ //if chessfield cell was clicked
-      divOutput.textContent = target.id; //write cell number into a div for output
-      if(currentSelect != ""){ //if previous selection exists
+    if (target.className.indexOf("cbSquare") !== -1){
+      divOutput.textContent = target.id;
+      if(currentSelect != ""){ 
         var oldSelect = document.getElementById(currentSelect);
         oldSelect.style.border = "none";
       }
       currentSelect = target.id;
       target.style.border = "3px solid yellow";
-
-      movePiece(currentSelect, "take");//if has a piece, place it to the taken area
     }
+  }
+  
+  this.takePiece = function(target){
+    movePiece(currentSelect, "take");
   }
   
   this.restorePieceAt = function(target){
-    if (target.className.indexOf("cell") !== -1){ //if cell was clicked
+    if (target.className.indexOf("cbSquare") !== -1){
       var id = target.id.slice(0, 2);
-      movePiece(id, "restore");//if has a piece, restore it from the taken area
-    }
-  }
-  
-  function drawchessSim(){ //draws chesschessSim and two areas for taken pieces
-    //create area for taken pieces (white)
-    self.whiteTaken = document.createElement("div");
-    self.whiteTaken.className = "takenArea";
-    myChessSim.appendChild(self.whiteTaken);
-
-    //create chessboard 
-    self._drawChessBoard(myChessSim);
-
-    //create area for taken pieces (black)
-    self.blackTaken = document.createElement("div");
-    self.blackTaken.className = "takenArea";
-    myChessSim.appendChild(self.blackTaken);
-    
-    fillchessSim();
-  }
-    
-  function fillchessSim() {  //fills-in areas with cells
-    //fill-in taken areas
-    for (var i = 0; i < 8; i++){
-      for (var j= 0; j < 2; j++){
-        var cell = document.createElement("div");
-        cell.className = "cell";
-        cell.id = alphabet[i] + (j + 1) + "taken";
-        self.whiteTaken.appendChild(cell);
-        cell = document.createElement("div");
-        cell.className = "cell";
-        cell.id = alphabet[i] + (j + 7) + "taken";
-        self.blackTaken.appendChild(cell);
-      }
+      movePiece(id, "restore");
     }
   }
   
   function movePiece(pos, action){ //take or restore the piece
     for(var i=0; i < self._chessPieces.length; i++){
       if(self._chessPieces[i]._position == pos){
-
         if (action == "take" && !self._chessPieces[i]._taken){
           document.getElementById(pos).innerHTML = "";
           document.getElementById(pos+"taken").innerHTML = self._chessPieces[i]._symbol;
@@ -165,20 +172,19 @@ function ChessSim(parentnode){ //Draws chessboard with areas for taken figures, 
       }
     }
   }
-  
-};
+}
 
+/* СhessBoard used to draw the chessboard and initialize chess pieces */
 function Chessboard(){
   var self = this;
-  var alphabet = "abcdefgh"; //used for naming chessboard positions
-  this._chessPieces = []; //array of chess pieces
-  this._drawChessBoard = function(parentnode){
-    
+  this._ALPHABET = "abcdefgh";
+  this._chessPieces = [];
+
+  this._drawChessBoard = function(parent){  
     var chessBoard = document.createElement("div");
     chessBoard.className = "chessBoard";
-    parentnode.appendChild(chessBoard);
-    
-    //inside chessBoard make areas for numbers and chessfield itself
+    parent.appendChild(chessBoard);
+
     self._fieldNumbers = document.createElement("div");
     self._fieldNumbers.className = "cbElement numbers";
     chessBoard.appendChild(self._fieldNumbers);
@@ -190,12 +196,38 @@ function Chessboard(){
     self._fieldLetters = document.createElement("div");
     self._fieldLetters.className = "cbElement letters";
     chessBoard.appendChild(self._fieldLetters);
-    fillChessBoard();
-    fillLegend();
-    
-    self._chessPieces = self._getPieces();
-    self._placePieces(self._chessPieces);
   }
+  
+  this._fillChessBoard = function(){
+    //fill-in chessfield
+    for (var i = 0; i < 8; i++){
+      for (var j= 0; j < 8; j++){
+        var square = document.createElement("div");
+        square.className = "cbSquare";
+        square.id = self._ALPHABET[j]+(8 - i);
+        if ((i + j) % 2){
+          square.className += " black";
+        } else {
+          square.className += " white";
+        }
+        self.chessField.appendChild(square);
+      } 
+    }
+  }  
+  
+  this._fillLegend = function (){
+    for (var i = 0; i < 8; i++){
+      var square = document.createElement("div");
+      square.className = "cbSquare";
+      square.innerText = self._ALPHABET[i];
+      self._fieldLetters.appendChild(square);
+
+      square = document.createElement("div");
+      square.className = "cbSquare";
+      square.innerText = 8 - i;
+      self._fieldNumbers.appendChild(square);
+    }
+  }  
   
   this._getPieces = function(){
     var arr = [];
@@ -216,53 +248,23 @@ function Chessboard(){
     arr.push(new Piece("black", "queen", "d8"));
     arr.push(new Piece("black", "king", "e8"));
     for (var i = 0; i < 8; i++){
-      arr.push(new Piece("white", "pawn", alphabet[i] + 2));
-      arr.push(new Piece("black", "pawn", alphabet[i] + 7));
+      arr.push(new Piece("white", "pawn", self._ALPHABET[i] + 2));
+      arr.push(new Piece("black", "pawn", self._ALPHABET[i] + 7));
     }
     return arr;
   }
   
-  this._placePieces = function(pieces){//puts pieces on the chessboard
+  this._placePieces = function(pieces){
     for(var i = 0; i < pieces.length; i++){
-      var cell = document.getElementById(pieces[i]._position);
-      cell.innerHTML = pieces[i]._symbol;
+      var square = document.getElementById(pieces[i]._position);
+      square.innerHTML = pieces[i]._symbol;
     }
   } 
-  
-  function fillChessBoard(){
-    //fill-in chessfield
-    for (var i = 0; i < 8; i++){
-      for (var j= 0; j < 8; j++){
-        var cell = document.createElement("div");
-        cell.className = "cell";
-        cell.id = alphabet[j]+(8 - i);
-        if ((i + j) % 2){
-          cell.className += " black";
-        } else {
-          cell.className += " white"; //put a chess piece symbol
-        }
-        self.chessField.appendChild(cell);
-      } 
-    }
-  }  
-  
-  function fillLegend(){
-    //fill-in numbers and letters
-    for (var i = 0; i < 8; i++){
-      var cell = document.createElement("div");
-      cell.className = "cell";
-      cell.innerText = alphabet[i];
-      self._fieldLetters.appendChild(cell);
-
-      cell = document.createElement("div");
-      cell.className = "cell";
-      cell.innerText = 8 - i;
-      self._fieldNumbers.appendChild(cell);
-    }
-  }  
 }
+  
 
-function Piece(c, n, p){ //object chesspiece
+/* Piece contains information about a chess piece */
+function Piece(c, n, p){ 
   this._name = n;
   this._color = c;
   this._position = p;
