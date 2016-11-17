@@ -49,29 +49,25 @@ function ChessSim(p){
   
   var self = this;
   var currentSelect = "";
-  
-  drawChessSim(p);
+  createChessSim(p);
   fillChessSim();
   this._fillChessBoard();
   this._fillLegend();
-  this._chessPieces = self._getPieces();
-  this._placePieces(self._chessPieces);
+  var chessPieces = self._getPieces();
+  this._placePieces(chessPieces);
   
-  function drawChessSim(parent){ 
-    var simContainer = document.createElement("div");
+  function createChessSim(parent){ 
+    var simContainer = document.createElement("div"); //create div-container
     simContainer.className = "simContainer";
     parent.appendChild(simContainer);
     
-    //create area for taken pieces (white)
-    self.whiteTaken = document.createElement("div");
+    self.whiteTaken = document.createElement("div");  //create area for taken pieces (white)
     self.whiteTaken.className = "takenArea";
     simContainer.appendChild(self.whiteTaken);
-
-    //create chessboard 
-    self._drawChessBoard(simContainer);
-
-    //create area for taken pieces (black)
-    self.blackTaken = document.createElement("div");
+    
+    self._createChessBoard(simContainer); //create chessboard 
+    
+    self.blackTaken = document.createElement("div");  //create area for taken pieces (black)
     self.blackTaken.className = "takenArea";
     simContainer.appendChild(self.blackTaken);
   }
@@ -157,16 +153,16 @@ function ChessSim(p){
   }
   
   function movePiece(pos, action){ //take or restore the piece
-    for(var i=0; i < self._chessPieces.length; i++){
-      if(self._chessPieces[i]._position == pos){
-        if (action == "take" && !self._chessPieces[i]._taken){
+    for(var i=0; i < chessPieces.length; i++){
+      if(chessPieces[i]._position == pos){
+        if (action == "take" && !chessPieces[i]._taken){
           document.getElementById(pos).innerHTML = "";
-          document.getElementById(pos+"taken").innerHTML = self._chessPieces[i]._symbol;
-          self._chessPieces[i]._taken = true;
-        } else if (action == "restore" && self._chessPieces[i]._taken){
-          document.getElementById(pos+"taken").innerHTML = "";
-          document.getElementById(pos).innerHTML = self._chessPieces[i]._symbol;
-          self._chessPieces[i]._taken = false;
+          document.getElementById(pos + "taken").innerHTML = chessPieces[i]._symbol;
+          chessPieces[i]._taken = true;
+        } else if (action == "restore" && chessPieces[i]._taken){
+          document.getElementById(pos + "taken").innerHTML = "";
+          document.getElementById(pos).innerHTML = chessPieces[i]._symbol;
+          chessPieces[i]._taken = false;
         }
         break;
       }
@@ -178,33 +174,31 @@ function ChessSim(p){
 function Chessboard(){
   var self = this;
   this._ALPHABET = "abcdefgh";
-  this._chessPieces = [];
 
-  this._drawChessBoard = function(parent){  
-    var chessBoard = document.createElement("div");
+  this._createChessBoard = function(parent){ 
+    var chessBoard = document.createElement("div"); //div-container
     chessBoard.className = "chessBoard";
     parent.appendChild(chessBoard);
-
-    self._fieldNumbers = document.createElement("div");
+    
+    self._fieldNumbers = document.createElement("div"); //vertical nubmers for squares itself
     self._fieldNumbers.className = "cbElement numbers";
     chessBoard.appendChild(self._fieldNumbers);
-
-    self.chessField = document.createElement("div");
+    
+    self.chessField = document.createElement("div"); //chessboard
     self.chessField.className = "cbElement chessField";
     chessBoard.appendChild(self.chessField);
-
-    self._fieldLetters = document.createElement("div");
+   
+    self._fieldLetters = document.createElement("div");  //horisontal letters for squares
     self._fieldLetters.className = "cbElement letters";
     chessBoard.appendChild(self._fieldLetters);
   }
   
   this._fillChessBoard = function(){
-    //fill-in chessfield
     for (var i = 0; i < 8; i++){
       for (var j= 0; j < 8; j++){
         var square = document.createElement("div");
         square.className = "cbSquare";
-        square.id = self._ALPHABET[j]+(8 - i);
+        square.id = self._ALPHABET[j] + (8 - i);
         if ((i + j) % 2){
           square.className += " black";
         } else {
@@ -217,12 +211,13 @@ function Chessboard(){
   
   this._fillLegend = function (){
     for (var i = 0; i < 8; i++){
-      var square = document.createElement("div");
+      
+      var square = document.createElement("div"); //horisontal letters
       square.className = "cbSquare";
       square.innerText = self._ALPHABET[i];
       self._fieldLetters.appendChild(square);
-
-      square = document.createElement("div");
+      
+      square = document.createElement("div"); //vertical numbers
       square.className = "cbSquare";
       square.innerText = 8 - i;
       self._fieldNumbers.appendChild(square);
