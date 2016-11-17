@@ -1,58 +1,57 @@
 /* Использует три класса:
-1) класс Table(аргументы: <Div> родительский_узел), наследует класс Chessboard. Доступные свойства: function moveSelection(аргументы: String куда), function selectFieldCell(аргументы: <Div> куда_кликнули), restorePieceAt(ргументы: <Div> куда_кликнули), <Div> whiteTaken, <Div> blackTaken.
+1) класс ChessSim(аргументы: <Div> родительский_узел), наследует класс Chessboard. Доступные свойства: function moveSelection(аргументы: String куда), function selectFieldCell(аргументы: <Div> куда_кликнули), restorePieceAt(ргументы: <Div> куда_кликнули), <Div> whiteTaken, <Div> blackTaken.
 2) класс Chessboard(). Доступные свойства: <div> chessField.
 3) класс Piece(аргументы: String цвет, String название, String позиция). */
 
 "use strict";
 
 var divOutput = document.getElementById("output"); //shows id of currently selected cell
-var tableNod = document.getElementById("tableNod");  //div containing the whole table
-var table = new Table(tableNod);
+var chessSimNod = document.getElementById("chessSimNod");  //div containing the whole chessSim
+var chessSim = new ChessSim(chessSimNod);
 
 //register event listeners
 document.addEventListener("keydown", onKeyDown);
-table.chessField.addEventListener("click", onFieldClicked);
-table.whiteTaken.addEventListener("click", onTakenClicked);
-table.blackTaken.addEventListener("click", onTakenClicked);
+chessSim.chessField.addEventListener("click", onFieldClicked);
+chessSim.whiteTaken.addEventListener("click", onTakenClicked);
+chessSim.blackTaken.addEventListener("click", onTakenClicked);
 //конец программы =3
 
 //event handlers
 
 function onKeyDown(e){//when any key is pressed, tells selection to move
   switch(e.keyCode){
-    case 38: table.moveSelection("up");
+    case 38: chessSim.moveSelection("up");
     break;
-    case 40: table.moveSelection("down");
+    case 40: chessSim.moveSelection("down");
     break;
-    case 37: table.moveSelection("left");
+    case 37: chessSim.moveSelection("left");
     break;
-    case 39: table.moveSelection("right");
+    case 39: chessSim.moveSelection("right");
     break;
   }
 }
 
 function onFieldClicked(e){// when field clicked
-  table.selectFieldCell(e.target);
+  chessSim.selectFieldCell(e.target);
 }
 
 function onTakenClicked(e){// when area for taken clicked
-  table.restorePieceAt(e.target);
+  chessSim.restorePieceAt(e.target);
 }
 
 
 //Classes:
 
-function Table(parentnode){ //Draws chessboard with areas for taken figures, controlls selection
-  //this.__proto__ = Chessboard.prototype;// - ПОЧЕМУ НЕ РАБОТАЕТ?
+function ChessSim(parentnode){ //Draws chessboard with areas for taken figures, controlls selection
   Chessboard.call(this); //extends Chessboard
   var self = this;
   var alphabet = "abcdefgh"; //used for naming chessboard positions
   var currentSelect = "";  //id of currently selected cell
-  var myTable = document.createElement("div");
-  myTable.className = "myTable";
-  parentnode.appendChild(myTable);
+  var myChessSim = document.createElement("div");
+  myChessSim.className = "myChessSim";
+  parentnode.appendChild(myChessSim);
   
-  drawTable();
+  drawchessSim();
   
   this.moveSelection = function(where){  //moves selection around
     if(currentSelect != ""){
@@ -116,24 +115,24 @@ function Table(parentnode){ //Draws chessboard with areas for taken figures, con
     }
   }
   
-  function drawTable(){ //draws chesstable and two areas for taken pieces
+  function drawchessSim(){ //draws chesschessSim and two areas for taken pieces
     //create area for taken pieces (white)
     self.whiteTaken = document.createElement("div");
     self.whiteTaken.className = "takenArea";
-    myTable.appendChild(self.whiteTaken);
+    myChessSim.appendChild(self.whiteTaken);
 
     //create chessboard 
-    self._drawChessBoard(myTable);
+    self._drawChessBoard(myChessSim);
 
     //create area for taken pieces (black)
     self.blackTaken = document.createElement("div");
     self.blackTaken.className = "takenArea";
-    myTable.appendChild(self.blackTaken);
+    myChessSim.appendChild(self.blackTaken);
     
-    fillTable();
+    fillchessSim();
   }
     
-  function fillTable() {  //fills-in areas with cells
+  function fillchessSim() {  //fills-in areas with cells
     //fill-in taken areas
     for (var i = 0; i < 8; i++){
       for (var j= 0; j < 2; j++){
