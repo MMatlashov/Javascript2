@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Компонент - рисовалка</title>
+  <link rel = "stylesheet" type = "text/css" href = "styles.css">
+</head>
+<body>
+  <div id ="canvasNode"></div>
+  
+  <script>
+    var myCanvas;
+    window.onload = function(){  myCanvas = new MyCanvas({parent: "canvasNode"}); };
+   
+    function MyCanvas(options){
+      var canvasNode = document.getElementById(options.parent) || document.getElementsByTagName('body')[0];
+      var drawing = false;
+      var context, canvas;
+      render();
+      
+      function render(){
+        canvas = document.createElement('canvas')
+        canvas.className = "canvas";
+        canvas.width = 300;
+        canvas.height = 300;
+        canvasNode.appendChild(canvas);
+        context = canvas.getContext('2d');
+        if (!context){
+          alert('Этот браузер не поддерживает элемент canvas');
+        }
+      }
+      
+      function drawFace(){
+        context.strokeStyle = '#f00';
+        context.fillStyle = '#ff0';
+        context.lineWidth = 4;
+        
+        context.beginPath();
+        context.arc(150, 150, 100, 0, 2 * Math.PI, true);
+        context.stroke();
+        context.closePath();
+        
+        context.beginPath();
+        context.arc(110, 110, 15, 0, 2 * Math.PI, true);
+        context.arc(190, 110, 15, 0, 2 * Math.PI, true);
+        context.fill();
+        context.closePath();
+        
+        context.beginPath();
+        context.moveTo(150, 120);
+        context.lineTo(135, 180);
+        context.lineTo(165, 180);
+        context.stroke();
+        context.closePath();
+        
+        context.beginPath();
+        context.arc(150, 150, 70, Math.PI, 2 * Math.PI, true);
+        context.stroke();
+        context.closePath();
+        
+        context.strokeStyle = '#000';
+        context.beginPath();
+        var x = 0;
+        var y = 0;
+        for (var i = 0; i < 5; i++){
+          context.moveTo(80 + x, 85 + y);
+          context.bezierCurveTo(60 + x, 60 + y, 120 + x, 40 + y, 100 + x, 0 + y);
+          context.stroke();
+          x += 15;
+          y -= 5;
+        }
+        for (var i = 0; i < 5; i++){
+          context.moveTo(80 + x, 85 + y);
+          context.bezierCurveTo(0 + x, 60 + y, 220 + x, 40 + y, 100 + x, 0 + y);
+          context.stroke();
+          x += 15;
+          y += 5;
+        }
+        context.closePath();
+        drawing = true;
+      }
+      
+      function clear(){
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        drawing = false;
+      }
+      
+      this.drawFace = drawFace;
+      this.clear = clear;
+      
+      canvasNode.onclick = function(e) {
+        if (context){
+          drawing? clear(): drawFace();
+        }
+      }
+    }
+  </script>
+</body>
+</html>
