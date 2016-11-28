@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Упражнение 1</title>
+</head>
+<body>
+  <script>
+    "use strict";
+    //Регулярное выражениеб для поиска цвета, заданного как #ABCDEF
+    
+    var regExp = new RegExp('#[0-9a-f]{6}', 'i');
+    console.log('#1253a0'.match(regExp));  //match!
+    console.log('#1253a'.match(regExp));  //null
+    console.log('#1253ag'.match(regExp));  //null
+    
+  </script>
+</body>
+</html>
