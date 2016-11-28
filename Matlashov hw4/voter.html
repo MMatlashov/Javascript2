@@ -13,7 +13,7 @@
     var voter1 = new Voter({parent: "voter1"}) 
     
     function Voter(options){
-      var voterNode = document.getElementById(options.parent);
+      var voterNode = document.getElementById(options.parent)|| document.getElementsByTagName('body')[0];
       render();
       
       function render(){

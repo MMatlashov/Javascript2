@@ -12,7 +12,7 @@
     clock.start();
     
     function Clock(options){
-      var clockNode = document.getElementById(options.parent);
+      var clockNode = document.getElementById(options.parent)|| document.getElementsByTagName('body')[0];
       var timeOut;
       var running = false;
       
