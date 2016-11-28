@@ -1,0 +1,15 @@
+*{
+  padding: 0px;
+  margin: 0px;
+}
+.myForm{
+  margin-top: 20px;
+  margin-left: 20px;
+}
+.inputTF, .inputBut{
+  display: block;
+}
+.inputTF{
+  width: 250px;
+  margin-bottom: 10px;
+}
