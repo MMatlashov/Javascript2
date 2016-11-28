@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Компонент - голосовалка</title>
+</head>
+<body>
+  <div id ="voter" class = "voter"></div>
+  <div id ="voter1" class = "voter"></div>
+  
+  <script>
+    var voter = new Voter({parent: "voter"});
+    var voter1 = new Voter({parent: "voter1"}) 
+    
+    function Voter(options){
+      var voterNode = document.getElementById(options.parent);
+      render();
+      
+      function render(){
+        var element = document.createElement('span');
+        element.className = "down";
+        element.textContent = "- ";
+        voterNode.appendChild(element);
+        
+        var element = document.createElement('span');
+        element.className = "vote";
+        element.textContent = "0";
+        voterNode.appendChild(element);
+        
+        var element = document.createElement('span');
+        element.className = "up";
+        element.textContent = " +";
+        voterNode.appendChild(element);
+      }
+      
+      function setVote(vote){
+        voterNode.getElementsByClassName("vote")[0].textContent = vote;
+      }
+      
+      this.setVote = setVote;
+      
+      function incrementVotes(){
+        setVote(getCurrentVotes() + 1);
+      }
+      
+      function decrementVotes(){
+        setVote(getCurrentVotes() - 1);
+      }
+      
+      function getCurrentVotes(){
+        
+        return parseInt( voterNode.getElementsByClassName("vote")[0].textContent );
+      }
+      
+      voterNode.onclick = function(e) {
+        switch(e.target.className){
+          case "up":
+            incrementVotes();
+          break;
+          case "down":
+            decrementVotes();
+          break;
+        }
+      }
+    }
+  </script>
+</body>
+</html>
