@@ -1,0 +1,15 @@
+[
+  {"color":"white", "name":"tower", "position":["a1","h8"]},
+  {"color":"white", "name":"knight", "position":["b1","g1"]},
+  {"color":"white", "name":"bishop", "position":["c1","f1"]},
+  {"color":"white", "name":"queen", "position":["d1"]},
+  {"color":"white", "name":"king", "position":["e1"]},
+  {"color":"white", "name":"pawn", "position":["a2","b2","c2","d2","e2","f2","g2","h2"]},
+  {"color":"black", "name":"tower", "position":["a8","h8"]},
+  {"color":"black", "name":"knight", "position":["b8","g8"]},
+  {"color":"black", "name":"bishop", "position":["c8","f8"]},
+  {"color":"black", "name":"queen", "position":["d8"]},
+  {"color":"black", "name":"king", "position":["e8"]},
+  {"color":"black", "name":"pawn", "position":["a7","b7","c7","d7","e7","f7","g7","h7"]}
+]
+
