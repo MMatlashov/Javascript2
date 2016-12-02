@@ -1,0 +1,46 @@
+
+*{
+  padding: 0px;
+  margin: 0px;
+}
+
+body{
+  width: 80%;
+  margin: auto;
+}
+
+#textNtabs{
+  margin-top: 20px;
+}
+
+#textNtabs li, #textNtabs .textArea{
+  border: 2px solid grey;
+  position: relative;
+}
+
+#textNtabs li{
+  background-color: #eef;
+  padding-left: 10px;
+  display: inline-block;
+  width: 20%;
+  border-left: 0px;
+  border-radius: 10px 10px 0px 0px;
+  margin: 0px;
+  float:left;
+  z-index: 2;
+}
+#textNtabs li:first-child{
+  border-left: 2px solid grey;
+}
+#textNtabs li.active{
+  background-color: #ddf;
+  border-bottom: 2px solid #ddf;
+}
+
+#textNtabs .textArea{
+  padding: 10px;
+  clear: both;
+  background-color: #ddf;
+  top: -2px;
+  z-index: 1;
+}

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <link rel = "stylesheet" type = "text/css" href="style.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+</head>
+<body>
+  <Div id = "textNtabs">
+    <Div class = "horizontal_nav">
+      <ul>
+        <li class>Concerning hobbits</li>
+        <li class>Concerning Pipe-weed</li>
+        <li class>Of the Ordering of the Shire</li>
+      </ul>
+    </Div>
+    <Div class = "textArea">
+      
+    </Div>
+  </Div>
+  
+  <script> 
+    (function ($){
+      $(document).ready(initialize);
+      
+      function initialize(){
+        $("#textNtabs li:first").addClass("active");
+        $("#textNtabs .textArea").load("data.html #hobbits");
+      }
+
+      $("#textNtabs").on("click", "li", function(){
+        setActiveTab(this);
+        loadTextAtTab(this);
+      });
+
+      function setActiveTab(tab){
+        $("#textNtabs li").removeClass("active");
+        tab.className += " active";
+      }
+      
+      function loadTextAtTab(tab){
+        var tabIndex = $("#textNtabs li").index(tab);
+        switch(tabIndex){
+          case 0: $("#textNtabs .textArea").load("data.html #hobbits");
+          break;
+          case 1: $("#textNtabs .textArea").load("data.html #pipeweed");
+          break;
+          case 2: $("#textNtabs .textArea").load("data.html #shire");
+          break;
+        }   
+      }
+
+    })(jQuery);
+  </script>
+</body>
+</html>
