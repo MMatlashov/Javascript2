@@ -1,0 +1,56 @@
+*{
+  padding: 0px;
+  margin: 0px;
+}
+body {
+  width: 80%;
+  margin:auto;
+}
+#myForm {
+  margin-top: 20px;
+}
+#myForm .fRow{
+  clear:both;
+}
+#myForm .fRow > div{
+  display: inline-block;
+  float: left;
+  margin-bottom: 10px;
+}
+#myForm .fRow > div:first-child{
+  width: 20%;
+  min-width: 200px;
+  text-align: right;
+  margin-right:10px;
+  font-weight:700;
+} 
+#myForm .fRow > div:last-child{
+  color: red;
+  margin-left: 10px;
+} 
+#myForm input[type="radio"]{
+  margin-right: 10px;
+}
+#myForm input[type="text"], #myForm input[type="password"], #myForm textarea{
+  width: 400px;
+  box-shadow: 0 0 2px #aaa;
+  padding: 3px;
+}
+#myForm textarea{
+  height:60px;
+  resize: none;
+  text-align: justify;
+}
+#myForm input[type="button"]{
+  width:70px;
+}
+#myForm .valid{
+  background-color: #dfd; 
+}
+#myForm .invalid{
+  background-color: #fdd; 
+}
+
+#progressbar {
+  width: 50%;
+}
