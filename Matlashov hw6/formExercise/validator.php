@@ -11,9 +11,8 @@ $rules = array(
     'birthdate'   => 'required|date',
 	'email'       => 'required|valid_email',
 	'gender'      => 'required|exact_len,1',
-	'credit_card' => 'required|valid_cc',
-	'bio'		  => 'required',
-	'birth'		  => 'required|date'
+	'creditcard' => 'required|valid_cc',
+	'bio'		  => 'required'
 );
 
 $validated = $validator->validate(
