@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang>
+  <head>
+    <meta charset="UTF-8">
+    <title>Форма</title>
+    <link rel = "stylesheet" type = "text/css" href = "style.css">
+    <link rel = "stylesheet" type = "text/css" href = "jquery-ui/jquery-ui.min.css">
+    <script src = "https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src = "jquery-ui/jquery-ui.min.js"></script>
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <div id = "progressbar">Form completion:</div>
+    <div id = "dialog" title = "Please complete all required fields">
+      
+      
+    </div>
+    
+   
+    <form id = "myForm">
+      <div class = fRow>
+        <div>Gender</div>
+        <div>
+          Male <input type = "radio" name = "gender" value = "M" checked = 'true'>
+          Female <input type = "radio" name = "gender" value = "F">
+        </div>
+        <div></div>
+      </div>
+      <div class = fRow>
+        <div>Username</div>
+        <div><input type = "text" name="username"></div>
+        <div></div>
+      </div>
+      <div class = fRow>
+        <div>Password</div>
+        <div><input type = "password" name="password"></div>
+        <div></div>
+      </div>
+      <div class = fRow>
+        <div>Birth date</div>
+        <div><input type = "text" id="datepicker" name = "birthdate"></div>
+        <div></div>
+      </div>
+      <div class = fRow>
+        <div>Email</div>
+        <div><input type = "text" name="email"></div>
+        <div></div>
+      </div>
+      <div class = fRow>
+        <div>Card number</div>
+        <div><input type = "text" name="creditcard"></div>
+        <div></div>
+      </div>
+      <div class = fRow>
+        <div>About  yourself</div>
+        <div><textarea name="bio"></textarea></div>
+        <div></div>
+      </div>
+      <div class = fRow>
+        <div><input type ="button" value = "Submit"></div>
+      </div>
+    </form>
+  
+  </body>
+</html>
