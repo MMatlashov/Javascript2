@@ -1,0 +1,49 @@
+"use strict"; 
+
+var clock = new Clock({parent: "myClock"});
+    clock.start();
+    
+    function Clock(options){
+      var clockNode = document.getElementById(options.parent)|| document.getElementsByTagName('body')[0];
+      var timeOut;
+      var running = false;
+      
+      function start(){
+        timeOut = setInterval(showTime, 1000);
+        running = true;
+      }
+      
+      function stop(){
+        clearInterval(timeOut);
+        running = false;
+      }
+      
+      this.start = start;
+      this.stop = stop;
+      
+      function showTime(){
+        render(getCurrentTime());
+      }
+      
+      function getCurrentTime(){
+        var date = new Date();
+        var currentTime = {
+          hours: to2DigitString(date.getHours()),
+          minutes: to2DigitString(date.getMinutes()),
+          seconds: to2DigitString(date.getSeconds())
+        }
+        return currentTime;
+      }
+      
+      function render(currentTime){
+        clockNode.textContent = currentTime.hours + ":" + currentTime.minutes + ":" + currentTime.seconds;
+      }
+      
+      function to2DigitString(int){
+        return int < 10 ? "0" + int : "" + int;
+      }
+      
+      clockNode.onclick = function(e) {
+        running? stop(): start();
+      }
+    }
