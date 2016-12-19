@@ -1,0 +1,55 @@
+$CHESS_SQUARE_SIZE : 50px;
+$CHESS_FIELD_SIZE : 8 * $CHESS_SQUARE_SIZE;
+$CONTENT_SIZE_MINIMUM : 800px;
+$SQUARE_COLOR_LIGHT : white;
+$SQUARE_COLOR_DARK : lightgrey;
+$TAKEN_AREA_COLOR : #f0f0f0;
+$BORDER_COLOR: grey;
+
+*{
+  padding: 0px;
+  margin: 0px;
+}
+#output{
+  margin: 10px 0px 10px 20px;
+  clear: both;
+}
+.simContainer{
+  text-align: center;  
+  font-size: 2em;
+  min-width: $CONTENT_SIZE_MINIMUM;
+  margin-left : 20px;
+}
+.takenArea, .fieldAndLegend, .cbElement, .cbSquare{
+   float: left;
+}
+.fieldAndLegend{
+  width: 10 * $CHESS_SQUARE_SIZE;
+}
+.takenArea{
+  width: 2 * $CHESS_SQUARE_SIZE;
+  background-color: $TAKEN_AREA_COLOR;
+}
+.chessField{
+  width: $CHESS_FIELD_SIZE;
+  height: $CHESS_FIELD_SIZE;
+  border: 1px solid $BORDER_COLOR;
+}
+.cbElement.numbers{
+  width: $CHESS_SQUARE_SIZE;
+}
+.cbElement.letters{
+  margin-left: $CHESS_SQUARE_SIZE;
+}
+.cbSquare {
+  display: inline-block;
+  width: $CHESS_SQUARE_SIZE;
+  height: $CHESS_SQUARE_SIZE;
+  box-sizing: border-box;
+}
+.cbSquare.black {
+  background-color: $SQUARE_COLOR_DARK;
+}
+.cbSquare.white {
+  background-color: $SQUARE_COLOR_LIGHT;
+}
